@@ -27,7 +27,6 @@ export default {
   },
   methods: {
     onChange() {
-    //   console.log(this.searchQuery);
       // send up the parent
         this.$emit("search-query", this.searchQuery);
     },
