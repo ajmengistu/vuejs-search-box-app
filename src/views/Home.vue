@@ -3,6 +3,7 @@
     <SearchBox v-on:search-query="updateSearchQuery" />
     <TMDBSearchList v-bind:queryResults="queryResults" />
     <YouTubeSearchList v-bind:youtubeQueryResults="youtubeQueryResults" />
+    <WikipediaSearchList v-bind:wikipediaQueryResults="wikipediaQueryResults" />
   </div>
 </template>
 
@@ -10,6 +11,7 @@
 import SearchBox from "../components/common/SearchBox";
 import TMDBSearchList from "../components/tmdb/TMDBSearchList";
 import YouTubeSearchList from "../components/youtube/YouTubeSearchList";
+import WikipediaSearchList from "../components/wikipedia/WikipediaSearchList";
 import axios from "axios";
 
 export default {
@@ -18,17 +20,20 @@ export default {
     SearchBox,
     TMDBSearchList,
     YouTubeSearchList,
+    WikipediaSearchList,
   },
   data() {
     return {
       queryResults: [],
       youtubeQueryResults: [],
+      wikipediaQueryResults: [],
     };
   },
   methods: {
     updateSearchQuery(searchQuery) {
       this.searchTMDB(searchQuery);
       this.searchYouTube(searchQuery);
+      this.searchWikipedia(searchQuery);
     },
     searchTMDB(searchQuery) {
       this.queryResults = [...this.queryResults, searchQuery];
@@ -43,12 +48,25 @@ export default {
         .catch((error) => console.log(error));
     },
     searchYouTube(searchQuery) {
+      this.youtubeQueryResults = [];
+      console.log(searchQuery);
+      // axios
+      //   .get(
+      //     `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${searchQuery}&key=AIzaSyDEo3Pw-0ZZ_F4sPWadom9CE1ISNQKivy0`
+      //   )
+      //   .then((response) => {
+      //     this.youtubeQueryResults = response.data.items;
+      //   })
+      //   .catch((error) => console.log(error));
+    },
+    searchWikipedia(searchQuery) {
       axios
         .get(
-          `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${searchQuery}&key=AIzaSyDEo3Pw-0ZZ_F4sPWadom9CE1ISNQKivy0`
+          `https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&list=search&srsearch=${searchQuery}`
         )
         .then((response) => {
-          this.youtubeQueryResults = response.data.items;
+          // console.log(response.data.query.search);
+          this.wikipediaQueryResults = response.data.query.search;
         })
         .catch((error) => console.log(error));
     },
