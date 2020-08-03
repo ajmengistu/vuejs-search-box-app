@@ -1,22 +1,26 @@
-FROM node:lts-alpine
+FROM node:13.12.0-alpine
 
-# install simple http server for serving static content
-RUN npm install -g http-server
-
-# make the 'app' folder the current working directory
+# Set working directory
 WORKDIR /app
 
-# copy both 'package.json' and 'package-lock.json'
+# Add package.json to WORKDIR and install dependencies
 COPY package*.json ./
-
-# install project dependencies
 RUN npm install
 
-# copy project files and folders to the current working directories
+# Add source code files to WORKDIR
 COPY . .
 
-# build app for production with minification
-RUN npm run build
+# Application port (optional)
+EXPOSE 3000
 
-EXPOSE 8080
-CMD [ "http-server", "dist" ]
+# Debugging port (optional)
+# For remote debugging, add this port to devspace.yaml: dev.ports[*].forward[*].port: 9229
+EXPOSE 9229
+
+# Container start command (DO NOT CHANGE and see note below)
+CMD ["npm", "run", "serve"]
+
+# To start using a different `npm run [name]` command (e.g. to use nodemon + debugger),
+# edit devspace.yaml:
+# 1) remove: images.app.injectRestartHelper (or set to false)
+# 2) add this: images.app.cmd: ["npm", "run", "dev"]

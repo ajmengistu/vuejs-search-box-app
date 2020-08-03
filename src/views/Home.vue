@@ -50,14 +50,14 @@ export default {
     searchYouTube(searchQuery) {
       this.youtubeQueryResults = [];
       console.log(searchQuery);
-      // axios
-      //   .get(
-      //     `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${searchQuery}&key=AIzaSyDEo3Pw-0ZZ_F4sPWadom9CE1ISNQKivy0`
-      //   )
-      //   .then((response) => {
-      //     this.youtubeQueryResults = response.data.items;
-      //   })
-      //   .catch((error) => console.log(error));
+      axios
+        .get(
+          `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${searchQuery}&key=AIzaSyDEo3Pw-0ZZ_F4sPWadom9CE1ISNQKivy0`
+        )
+        .then((response) => {
+          this.youtubeQueryResults = response.data.items;
+        })
+        .catch((error) => console.log(error));
     },
     searchWikipedia(searchQuery) {
       axios
